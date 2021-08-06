@@ -1,0 +1,27 @@
+import {io} from 'socket.io-client'
+
+const socket = io("http://localhost:65431/client", { transports: ["websocket"], auth: {token: 'abc'}})
+
+socket.on("connect", () => {
+  // would run again once it reconnected
+  socket.emit('get server info')
+  socket.emit('hey you', 'good to see you')
+});
+
+socket.io.on('reconnect', function() {
+  console.log('reconnect fired!');
+});
+
+socket.on('re: get server info', (serverId: string, gameOn: boolean) => console.log(`connected to server ${serverId}\ngame status: ${gameOn}`))
+
+socket.on('re: hey you', (msg) => {
+  console.log(msg)
+})
+
+socket.on('game over', (status: boolean) => {
+  console.log(status)
+})
+
+socket.on("connect_error", (err) => {
+  console.log(err.message);
+});

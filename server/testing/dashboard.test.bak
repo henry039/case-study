@@ -1,0 +1,19 @@
+import {io} from 'socket.io-client'
+
+const socket = io('http://localhost:65431/dashboard', {transports:["websocket"], auth: {token: 'xyz'}})
+
+socket.on("connect", () => {
+    console.log('server connection ready')
+});
+
+socket.io.on('reconnect', function() {
+    console.log('reconnect fired!');
+});
+
+socket.on("someone join", (playerId: string) => {
+    console.log(playerId)
+});
+
+socket.on("connect_error", (err) => {
+    console.log(err.message);
+});
